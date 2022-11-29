@@ -3,7 +3,9 @@ package br.com.crudangularspring.crudangularspring.api.cursos;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,11 @@ public class CursosResource {
 	@PostMapping("/add")
 	public CursoResponseDTO incluirCurso(@RequestBody CursoRequestDTO request) {
 		return cursosService.incluirCurso(request);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<CursoEntity> buscarCurso(@PathVariable Long id) {
+		return cursosService.buscarCurso(id);
 	}
 	
 }
