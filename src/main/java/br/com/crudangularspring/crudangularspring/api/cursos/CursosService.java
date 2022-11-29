@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.crudangularspring.crudangularspring.api.cursos.dto.CursoRequestDTO;
@@ -54,32 +55,16 @@ public class CursosService {
 		return response;
 	}
 	
-	public CursoResponseDTO editarCurso(CursoRequestDTO request, Long id) {
-		
+	public ResponseEntity<CursoEntity> buscarCurso(Long id) {
+		Optional<CursoEntity> curso = Optional.empty();
 		if(id != null) {
 			try {
-				Optional<CursoEntity> curso = cursosRepository.findById(id);
-				curso.get().setCurso(request.getCurso());
-				curso.get().setCategoria(request.getCategoria());
-				cursosRepository.save(curso.get());
+				curso = cursosRepository.findById(id);
 			} catch(InvalidParameterException ex) {
-				CursoResponseDTO response = new CursoResponseDTO();
-				response.setCodigo("400");
-				response.setMensagem("Não foi possivel editar o curso. Tente novamente.");
-				return response;
+				return ResponseEntity.notFound().build();
 			}
-			
-			CursoResponseDTO response = new CursoResponseDTO();
-			response.setCodigo("200");
-			response.setMensagem("Curso incluido com sucesso.");
-			
-			return response;
 		}
-		
-		CursoResponseDTO response = new CursoResponseDTO();
-		response.setCodigo("400");
-		response.setMensagem("Não foi possivel salvar o curso. Tente novamente.");
-		return response;
+		return ResponseEntity.ok(curso.get());
 	}
 	
 }
